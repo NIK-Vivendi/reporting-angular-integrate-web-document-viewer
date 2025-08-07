@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using DevExpress.AspNetCore;
 using DevExpress.AspNetCore.Reporting;
+using DevExpress.XtraReports.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,8 @@ using ServerApp.Services;
 using ServerApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+ScriptPermissionManager.GlobalInstance = new ScriptPermissionManager(ExecutionMode.Unrestricted);
 
 AppDomain.CurrentDomain.SetData("DataDirectory", builder.Environment.ContentRootPath);
 builder.Services.AddDevExpressControls();
@@ -64,6 +67,8 @@ app.UseCors("AllowCorsPolicy");
 
 app.UseDevExpressControls();
 System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
+
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
